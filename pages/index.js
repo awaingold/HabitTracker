@@ -15,8 +15,31 @@ export default function Home() {
 }, []);
 
 
-  const handleAddHabit = (habit) => {
-    setHabits([habit, ...habits]);
+  const handleAddHabit = async (habit) => {
+
+    try {
+
+      const res = await fetch('http://localhost:4000/api/habits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(habit),
+      });
+
+      if (!res.ok) {
+        throw new Error(savedHabit.error || 'Failed to save habit');
+      }
+
+      const savedHabit = await res.json();
+      setHabits([savedHabit, ...habits]);
+      
+
+    } catch (error) {
+      console.error('Error adding habit:', error);
+      alert('Failed to add habit. Please try again.');
+    }
+    
   };
 
 
