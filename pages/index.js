@@ -11,7 +11,7 @@ export default function Home() {
   fetch('http://localhost:4000/api/habits')
     .then(res => res.json())
     .then(data => setHabits(data))
-    .catch(console.error);
+    .catch(console.error());
 }, []);
 
 
@@ -42,6 +42,11 @@ export default function Home() {
     
   };
 
+  const handleDeleteHabit = async (id) => {
+
+    setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== id));
+  };
+
 
   return (
     <div className="container mx-auto p-4">
@@ -50,7 +55,7 @@ export default function Home() {
         <meta name="description" content="Track your daily habits easily!" />
       </Head>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
-      <HabitList habits = {habits}/>
+      <HabitList habits = {habits} onDelete = {handleDeleteHabit}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
   );

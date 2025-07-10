@@ -18,7 +18,19 @@ app.use(express.json());
 const PORT = 4000;
 
 app.get('/api/habits', (req, res) => {
-  res.json([{ id: 1, title: 'Sample habit', description: 'Test habit from backend' }]); 
+  
+  admin.firestore().collection('habits').get()
+    .then(snapshot => {
+ 
+      const habits = [];
+      snapshot.forEach(doc => {
+        const habit = doc.data();
+        habit.id = doc.id;
+        habits.push(habit);
+      });
+
+      res.status(200).json(habits);
+    }) 
 });
 
 app.post('/api/habits', async (req, res) => {
@@ -40,6 +52,18 @@ app.post('/api/habits', async (req, res) => {
   
   res.status(201).json(newHabit);
 
+});
+
+app.delete('/api/habits/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await db.collection('habits').doc(id).delete();
+    res.status(204).json({success: true, deletedId: id});
+  } catch (error) {
+    console.error('Error deleting habit:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete habit' });
+  }
 });
 
 app.listen(PORT, () =>{console.log(`Server is running on http://localhost:${PORT}`);});
