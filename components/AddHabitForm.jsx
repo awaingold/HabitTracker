@@ -5,16 +5,15 @@ const AddHabitForm = ({ onAddHabit }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (title.trim() === '') return;
 
         const newHabit = {
-            id: Date.now(),
             title,
             description,
         };
-
+        
         onAddHabit(newHabit);
         setTitle('');
         setDescription('');
