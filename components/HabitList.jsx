@@ -17,7 +17,7 @@ const HabitList = ({habits, onDelete}) => {
       <h2 className="text-xl font-semibold">Your Habits</h2>
       <ul className="list-disc pl-6">
         {habits.map((habit) => (
-          <li key={habit.id} className="text-lg">{habit.title}<DeleteButton habitId={habit.id} onDelete={onDelete} className="mr-2" />
+          <li key={habit.id} className="flex items-center justify-between"><span>{habit.title}</span><DeleteButton habitId={habit.id} onDelete={onDelete} className="ml-4" />
             
           </li>
         ))}
