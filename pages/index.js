@@ -47,6 +47,14 @@ export default function Home() {
     setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== id));
   };
 
+  const handleCheckInHabit = async (updatedHabit) => {
+
+    setHabits(prev =>
+  prev.map(habit => habit.id === updatedHabit.id ? updatedHabit : habit)
+);
+
+  };
+
 
   return (
     <div className="container mx-auto p-4">
@@ -55,7 +63,7 @@ export default function Home() {
         <meta name="description" content="Track your daily habits easily!" />
       </Head>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
-      <HabitList habits = {habits} onDelete = {handleDeleteHabit}/>
+      <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
   );
