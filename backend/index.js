@@ -46,7 +46,8 @@ app.post('/api/habits', async (req, res) => {
     description: description || '',
     createdAt: admin.firestore.Timestamp.now(),
     lastChecked: null,
-    streakCount: 0
+    streakCount: 0,
+    streakStatus: 'started'
   };
 
   const docRef = await admin.firestore().collection('habits').add(newHabit);
@@ -82,19 +83,42 @@ app.patch('/api/habits/:id/check-in', async (req, res) => {
       return res.status(404).json({ error: 'Habit not found' });
     }
 
+    const lastCheckedDate = data.lastChecked ? data.lastChecked.toDate() : null;
+    const now = admin.firestore.Timestamp.now();
+    const today = now.toDate();
+
     if(data.lastChecked && 
-       data.lastChecked.toDate().toDateString() === new Date().toDateString()) {
+       lastCheckedDate.toDateString() === today.toDateString()) {
       return res.status(400).json({ error: 'Habit already checked in today' });
     }
 
-    const now = admin.firestore.Timestamp.now();
+    let newStreak = data.streakCount || 0;
+    
+
+    if(lastCheckedDate) {
+
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+
+      if(lastCheckedDate.toDateString() === yesterday.toDateString()) {
+        newStreak += 1; 
+      } else {
+        newStreak = 1; 
+      }
+
+    } else {
+      newStreak = 1; 
+    }
+
+    const createdDate = data.createdAt ? data.createdAt.toDate() : now.toDate();
 
     const updatedHabit = {
       title: data.title,
       description: data.description,
       createdAt: data.createdAt,
       lastChecked: now,
-      streakCount: data.streakCount + 1
+      streakCount: newStreak,
+      streakStatus: newStreak > 1 ? 'continued' : createdDate.toDateString() === today.toDateString() ? 'started' : 'reset' 
     }
 
     await habitRef.update(updatedHabit);
@@ -105,7 +129,7 @@ app.patch('/api/habits/:id/check-in', async (req, res) => {
   } catch (error) {
 
     console.error('Error checking in habit:', error);
-    return res.status(500).json({ error: 'Failed to check in habit' });
+    return res.status(500).json({ error: 'Internal server error: failed to check in habit' });
 
   }
 });

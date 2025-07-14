@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast';
+
 const DeleteButton = ({ habitId, onDelete }) => {
 
     const handleDelete = async () => {
@@ -9,9 +11,12 @@ const DeleteButton = ({ habitId, onDelete }) => {
                 method: 'DELETE' });
 
             if (!res.ok) {
+                toast.error('Failed to delete habit. Please try again.');
                 throw new Error('Failed to delete habit');
             }
             onDelete(habitId);
+            toast.success('Habit deleted successfully!');
+            
         } catch (error) { 
             console.error('Error deleting habit:', error);
             alert('Failed to delete habit. Please try again.');

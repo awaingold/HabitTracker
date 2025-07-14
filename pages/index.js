@@ -2,6 +2,7 @@ import Head from 'next/head';
 import HabitList from '../components/HabitList';
 import AddHabitForm from '@/components/AddHabitForm';
 import { useState , useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 export default function Home() {
 
@@ -62,6 +63,7 @@ export default function Home() {
         <title>Habit Tracker</title>
         <meta name="description" content="Track your daily habits easily!" />
       </Head>
+      <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
       <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
