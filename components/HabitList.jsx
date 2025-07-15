@@ -1,8 +1,9 @@
 import React from 'react';
 import DeleteButton from './DeleteButton';
 import CheckInButton from './CheckInButton';
+import HabitCard from './HabitCard';
 
-const HabitList = ({habits, onDelete, onCheckIn}) => {
+const HabitList = ({habits, onDelete, onCheckIn, onOpenDetails}) => {
 
     if(habits.length === 0) {
         return (
@@ -15,18 +16,18 @@ const HabitList = ({habits, onDelete, onCheckIn}) => {
 
     return (
         <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Your Habits</h2>
-      <ul className="list-disc pl-6">
-        {habits.map((habit) => (
-          <li key={habit.id} className="flex items-center justify-between">
-            <span>{habit.title}</span>
-            <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded ml-2 text-xs">{habit.streakCount}-day streak 🔥</span>
-            <span><DeleteButton habitId={habit.id} onDelete={onDelete} className="ml-4"/></span>
-            <span><CheckInButton habitId={habit.id} onCheckIn={onCheckIn} habits={habits} className="ml-4"/></span>
-          </li>
-        ))}
-      </ul>
-    </div>
+          <h2 className="text-xl font-semibold">Your Habits</h2>
+          <div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {habits.map((habit) => (
+            <HabitCard 
+                habit={habit} 
+                onDelete={onDelete} 
+                onCheckIn={onCheckIn}
+                onOpenDetails={onOpenDetails}
+            />
+      ))}
+          </div>
+        </div>
 
     )
 }

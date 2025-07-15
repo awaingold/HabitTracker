@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 
-const checkInButton = ({habitId, onCheckIn, habits}) => {
+const checkInButton = ({habitId, onCheckIn, habit}) => {
 
     const handleCheckIn = async () => {
         try {
