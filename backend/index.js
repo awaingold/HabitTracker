@@ -35,7 +35,7 @@ app.get('/api/habits', (req, res) => {
 
 app.post('/api/habits', async (req, res) => {
 
-  const {title, description} = req.body;
+  const {title, description, streakGoal} = req.body;
 
   if(!title || typeof title !== 'string') {
     return res.status(400).json({ error: 'Title is required' });
@@ -44,6 +44,7 @@ app.post('/api/habits', async (req, res) => {
   const newHabit = {
     title,
     description: description || '',
+    streakGoal: parseInt(streakGoal) || 7,
     createdAt: admin.firestore.Timestamp.now(),
     lastChecked: null,
     streakCount: 0,
@@ -118,7 +119,8 @@ app.patch('/api/habits/:id/check-in', async (req, res) => {
       createdAt: data.createdAt,
       lastChecked: now,
       streakCount: newStreak,
-      streakStatus: newStreak > 1 ? 'continued' : createdDate.toDateString() === today.toDateString() ? 'started' : 'reset' 
+      streakStatus: newStreak > 1 ? 'continued' : createdDate.toDateString() === today.toDateString() ? 'started' : 'reset',
+      streakGoal: data.streakGoal || 7 
     }
 
     await habitRef.update(updatedHabit);
@@ -131,6 +133,43 @@ app.patch('/api/habits/:id/check-in', async (req, res) => {
     console.error('Error checking in habit:', error);
     return res.status(500).json({ error: 'Internal server error: failed to check in habit' });
 
+  }
+});
+
+app.patch('/api/habits/:id', async (req, res) => {
+
+  console.log('Updating habit with ID:', req.params.id);
+
+  const { id } = req.params;
+  const { title, description, streakGoal } = req.body;
+  console.log(req.body);
+  const habitRef = db.collection('habits').doc(id);
+
+  try {
+    const habitDoc = await habitRef.get();
+
+    if (!habitDoc.exists) {
+      return res.status(404).json({ error: 'Habit not found' });
+    }
+
+    const updatedHabit = {
+      title: title || habitDoc.data().title,
+      description: description || habitDoc.data().description,
+      createdAt: habitDoc.data().createdAt,
+      streakGoal: parseInt(streakGoal) || habitDoc.data().streakGoal,
+      lastChecked: habitDoc.data().lastChecked,
+      streakCount: habitDoc.data().streakCount,
+      streakStatus: habitDoc.data().streakStatus,
+    };
+
+    await habitRef.update(updatedHabit);
+    updatedHabit.id = id;
+
+    res.status(200).json(updatedHabit);
+
+  } catch (error) {
+    console.error('Error updating habit:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

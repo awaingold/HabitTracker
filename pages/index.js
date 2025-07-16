@@ -3,6 +3,7 @@ import HabitList from '../components/HabitList';
 import AddHabitForm from '@/components/AddHabitForm';
 import { useState , useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function Home() {
 
@@ -56,10 +57,37 @@ export default function Home() {
 
   };
 
-  const handleOpenDetails = (habitId) => {
-    // Logic to open habit details can be implemented here
-  };
+  const handleSetGoal = async (habitId, newGoal, habit) => {
 
+    habit.streakGoal = newGoal;
+
+    try {
+      const res = await fetch(`http://localhost:4000/api/habits/${habitId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(habit),
+      });
+
+      if (!res.ok) {
+        toast.error('Failed to update goal');
+        return;
+      }
+
+      const updatedHabit = await res.json();
+
+      setHabits(prevHabits =>
+        prevHabits.map(habit => habit.id === updatedHabit.id ? updatedHabit : habit)
+      );
+
+      toast.success('Goal updated successfully');
+
+    } catch (error) {
+      console.error('Error updating goal:', error);
+      toast.error('Failed to update goal');
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 bg-zinc-900 text-gray-100 min-h-screen">
@@ -69,7 +97,7 @@ export default function Home() {
       </Head>
       <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
-      <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onOpenDetails={handleOpenDetails}/>
+      <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onUpdateGoal={handleSetGoal}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
   );

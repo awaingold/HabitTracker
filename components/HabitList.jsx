@@ -3,7 +3,7 @@ import DeleteButton from './DeleteButton';
 import CheckInButton from './CheckInButton';
 import HabitCard from './HabitCard';
 
-const HabitList = ({habits, onDelete, onCheckIn, onOpenDetails}) => {
+const HabitList = ({habits, onDelete, onCheckIn, onUpdateGoal}) => {
 
     if(habits.length === 0) {
         return (
@@ -23,7 +23,7 @@ const HabitList = ({habits, onDelete, onCheckIn, onOpenDetails}) => {
                 habit={habit} 
                 onDelete={onDelete} 
                 onCheckIn={onCheckIn}
-                onOpenDetails={onOpenDetails}
+                onUpdateGoal={onUpdateGoal}
             />
       ))}
           </div>

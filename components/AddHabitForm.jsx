@@ -4,6 +4,7 @@ const AddHabitForm = ({ onAddHabit }) => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [streakGoal, setStreakGoal] = useState(7);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -12,6 +13,9 @@ const AddHabitForm = ({ onAddHabit }) => {
         const newHabit = {
             title,
             description,
+            streakGoal: parseInt(streakGoal, 10) || 7, 
+            streakCount: 0,
+            lastChecked: null
         };
         
         onAddHabit(newHabit);
@@ -31,6 +35,17 @@ const AddHabitForm = ({ onAddHabit }) => {
                     className="mt-1 block w-full border text-white bg-zinc-700 border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Enter habit title"
                 />
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium mb-1">Habit Streak Goal</label>
+                <input
+                    type="number"
+                    min="1"
+                    onChange={(e) => setStreakGoal(e.target.value)}
+                    className="mt-1 block w-full border text-white bg-zinc-700 border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter streak goal (default is 7)"
+                    />
             </div>
             <div>
                 <label className="block text-sm font-medium">Description</label>
