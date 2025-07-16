@@ -56,16 +56,20 @@ export default function Home() {
 
   };
 
+  const handleOpenDetails = (habitId) => {
+    // Logic to open habit details can be implemented here
+  };
+
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-zinc-900 text-gray-100 min-h-screen">
       <Head>
         <title>Habit Tracker</title>
         <meta name="description" content="Track your daily habits easily!" />
       </Head>
       <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
-      <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit}/>
+      <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onOpenDetails={handleOpenDetails}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
   );
