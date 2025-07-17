@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const AddHabitForm = ({ onAddHabit }) => {
 
@@ -21,6 +22,8 @@ const AddHabitForm = ({ onAddHabit }) => {
         onAddHabit(newHabit);
         setTitle('');
         setDescription('');
+        setStreakGoal(7);
+        toast.success('Habit added successfully!');
     };
 
     return (
@@ -42,6 +45,7 @@ const AddHabitForm = ({ onAddHabit }) => {
                 <input
                     type="number"
                     min="1"
+                    value={streakGoal}
                     onChange={(e) => setStreakGoal(e.target.value)}
                     className="mt-1 block w-full border text-white bg-zinc-700 border-zinc-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Enter streak goal (default is 7)"

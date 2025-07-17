@@ -19,6 +19,7 @@ const checkInButton = ({habitId, onCheckIn, habit}) => {
 
             const updatedHabit = await response.json();
             onCheckIn(updatedHabit);
+
             if(updatedHabit.streakStatus === 'started') {
                 toast.success(`Habit checked in! Your streak has started!`);
             } else if(updatedHabit.streakStatus === 'reset') {
@@ -26,6 +27,10 @@ const checkInButton = ({habitId, onCheckIn, habit}) => {
             }
             else {
                 toast.success(`🔥 Habit checked in! Your streak is now ${updatedHabit.streakCount} days!`);
+            }
+
+            if(habit && habit.streakGoal && updatedHabit.streakCount >= habit.streakGoal) {
+                toast.success(`🎉 Congratulations! You've reached your streak goal of ${habit.streakGoal} days!`);
             }
 
 

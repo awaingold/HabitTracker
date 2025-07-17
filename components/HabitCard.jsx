@@ -39,21 +39,23 @@ const HabitCard = ({habit, onDelete, onCheckIn, onUpdateGoal}) => {
                         <ProgressBar habit={habit} />
                     </div>
 
-                    <div className="flex justify-between items-center mt-4 width-full">
-                        <button onClick={() => setShowEditingGoal(!showEditingGoal)} className="text-blue-500 hover:underline">
+                    <div className="flex justify-between items-center mt-4">
+                        <button onClick={() => setShowEditingGoal(!showEditingGoal)} className="bg-purple-500 text-white px-4 py-2 rounded font-medium hover:bg-purple-600 transition duration-200">
                             {showEditingGoal ? 'Hide Editor' : 'Edit Streak Goal'}
                         </button>
+                    </div>
                         
                         {showEditingGoal && (
-                            <div className="mt-2 flex items-center gap-2">
+                            <div className="mt-4 flex items-center gap-2">
                             <form onSubmit={
                                 (e) => {
                                     e.preventDefault();
-                                    onUpdateGoal(habit.id, newGoal, habit)
+                                    onUpdateGoal(habit.id, newGoal, habit);
                                 }
                                 } className="flex items-center gap-2">
                                 <input type="number"
                                 min="1"
+                                className="bg-zinc-900 rounded-sm"
                                 placeholder="Set new goal"
                                 onChange={(e) => setNewGoal(e.target.value)}/>
                                 <input type="submit" value="Update Goal" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 cursor-pointer"/>
@@ -62,7 +64,7 @@ const HabitCard = ({habit, onDelete, onCheckIn, onUpdateGoal}) => {
                             </div>
                                 )}
                         
-                    </div>
+                    
                 </div>)}
 
         </div>
