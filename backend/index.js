@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const admin = require('firebase-admin');
+const router = express.Router();
 
 const serviceAccount = require('./service-account.json');
 
@@ -12,12 +13,32 @@ const db = admin.firestore();
 
 const app = express();
 
+const authenticate = (async (req, res, next) => {
+
+  const { token } = req.header.authorization?.split('Bearer ')[1];
+  
+  if(!token) {
+    return res.status(401).send('Missing auth token');
+  }
+
+  try {
+
+    const decodedToken = await admin.auth.verifyIdToken(token);
+    req.uid = decodedToken.uid;
+    next();
+
+  } catch(error) {
+      res.status(401).send('Invalid token');
+  }
+
+});
+
 app.use(cors());
 app.use(express.json());
 
 const PORT = 4000;
 
-app.get('/api/habits', (req, res) => {
+app.get('/api/user/{uid}/habits', (req, res) => {
   
   admin.firestore().collection('habits').get()
     .then(snapshot => {
@@ -56,6 +77,44 @@ app.post('/api/habits', async (req, res) => {
   newHabit.id = docRef.id; 
   
   res.status(201).json(newHabit);
+
+});
+
+router.post('/habits', authenticate, async (req, res) => {
+
+  const {title, streakGoal, uid, description} = req.body;
+  
+  if(!title) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const newHabit = {
+    title,
+    uid,
+    description: description || '',
+    streakGoal: parseInt(streakGoal) || 7,
+    createdAt: admin.firestore.Timestamp.now(),
+    lastChecked: null,
+    streakCount: 0,
+    streakStatus: 'started'
+  }
+
+    const habitRef = db
+      .collection('users')
+      .doc(req.uid)
+      .collection('habits');
+
+    const doc = await habitRef.add(newHabit);
+    newHabit.id = doc.id;
+
+    res.status(201).json(newHabit);
+    
+  } catch(error) {
+
+    res.status(500).json({error: 'Something went wrong.'});
+
+  }
 
 });
 

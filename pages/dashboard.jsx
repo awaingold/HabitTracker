@@ -33,24 +33,23 @@ export default function Dashboard() {
 }, []);
 
 
-  const handleAddHabit = async (habit) => {
+  const handleAddHabit = async (habit, user) => {
+
+    const {title, streakGoal, description} = habit;
+    const token = await user.getIdToken();
 
     try {
 
-      const res = await fetch('http://localhost:4000/api/habits', {
+      const res = await fetch('http://localhost:4000/habits', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(habit),
+        body: JSON.stringify({ title, streakGoal, description })
       });
 
-      if (!res.ok) {
-        throw new Error(savedHabit.error || 'Failed to save habit');
-      }
-
-      const savedHabit = await res.json();
-      setHabits([savedHabit, ...habits]);
+      return await res.json();
       
 
     } catch (error) {

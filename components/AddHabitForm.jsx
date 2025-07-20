@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const AddHabitForm = ({ onAddHabit }) => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [streakGoal, setStreakGoal] = useState(7);
+    const { user, loading } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +21,7 @@ const AddHabitForm = ({ onAddHabit }) => {
             lastChecked: null
         };
         
-        onAddHabit(newHabit);
+        onAddHabit(newHabit, user);
         setTitle('');
         setDescription('');
         setStreakGoal(7);
