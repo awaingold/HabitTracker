@@ -6,11 +6,10 @@ import HabitList from '../components/HabitList';
 import AddHabitForm from '@/components/AddHabitForm';
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
-import App from './_app';
 
 export default function Dashboard() {
 
-    const {user, loading} = useAuth();
+    const {user, loading, logout} = useAuth();
     const router = useRouter();
 
     useEffect(() => {
@@ -114,6 +113,7 @@ export default function Dashboard() {
       </Head>
       <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
+      <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded font-medium hover:bg-red-600 transition duration-200 fixed top-0 right-0 m-4">Log Out</button>
       <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onUpdateGoal={handleSetGoal}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
