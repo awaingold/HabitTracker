@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 export default function LogIn() {
 
-    const { login } = useAuth();
+    const { login , resetPassword } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
@@ -32,6 +32,10 @@ export default function LogIn() {
             }
             
         }
+    };
+
+    const handleResetPassword = () => {
+        router.push('/resetPassword');
     };
 
     return (
@@ -61,6 +65,7 @@ export default function LogIn() {
                 </form>
                 <a href="/SignUp" className="mt-4 text-center text-blue-500 hover:underline">
                 Don't have an account? Sign Up</a>
+                <button onClick = {handleResetPassword} className = "text-blue-500 hover:underline">Forgot Password?</button>
             </div>
             
         </div>
