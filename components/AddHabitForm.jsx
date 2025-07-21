@@ -10,18 +10,36 @@ const AddHabitForm = ({ onAddHabit }) => {
     const { user, loading } = useAuth();
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         if (title.trim() === '') return;
-
-        const newHabit = {
-            title,
-            description,
-            streakGoal: parseInt(streakGoal, 10) || 7, 
-            streakCount: 0,
-            lastChecked: null
-        };
+        const token = await user.getIdToken();
         
-        onAddHabit(newHabit, user);
+        let newHabit = {
+            title,
+            streakGoal,
+            description
+        }
+
+        try {
+            const res = await fetch('http://localhost:4000/habits', {
+                method: 'POST',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, streakGoal, description })
+            });
+
+            const { id } = await res.json();
+            newHabit.id = id;
+            
+        } catch (error) {
+            console.error('Error adding habit:', error);
+            alert('Failed to add habit. Please try again.');
+        }
+        
+        onAddHabit(newHabit);
         setTitle('');
         setDescription('');
         setStreakGoal(7);

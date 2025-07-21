@@ -11,6 +11,7 @@ export default function Dashboard() {
 
     const {user, loading, logout} = useAuth();
     const router = useRouter();
+    const [habits, setHabits] = useState([]);
 
     useEffect(() => {
         
@@ -23,39 +24,32 @@ export default function Dashboard() {
         return <p className="text-white p-6">Loading...</p>;
     }
 
-    const [habits, setHabits] = useState([]);
+    useEffect(() => {
 
-  useEffect(() => {
-  fetch('http://localhost:4000/api/habits')
-    .then(res => res.json())
-    .then(data => setHabits(data))
-    .catch(console.error());
-}, []);
-
-
-  const handleAddHabit = async (habit, user) => {
-
-    const {title, streakGoal, description} = habit;
-    const token = await user.getIdToken();
+      const fetchHabits = async () => {
+    if (!user) return;
 
     try {
-
+      const token = await user.getIdToken();
       const res = await fetch('http://localhost:4000/habits', {
-        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, streakGoal, description })
       });
 
-      return await res.json();
-      
-
+      const data = await res.json();
+      setHabits(data); // 🧠 Sync response into state
     } catch (error) {
-      console.error('Error adding habit:', error);
-      alert('Failed to add habit. Please try again.');
+      console.error('Error fetching habits:', error);
     }
+    };
+
+    fetchHabits();
+  }, []);
+
+  const handleAddHabit = async (newHabit) => {
+
+    setHabits([...habits, newHabit]); 
     
   };
 
@@ -77,9 +71,12 @@ export default function Dashboard() {
     habit.streakGoal = newGoal;
 
     try {
-      const res = await fetch(`http://localhost:4000/api/habits/${habitId}`, {
+
+      const token = await user.getIdToken();
+      const res = await fetch(`http://localhost:4000/habits/${habitId}/update`, {
         method: 'PATCH',
         headers: {
+          authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(habit),

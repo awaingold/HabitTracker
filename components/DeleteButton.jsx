@@ -1,14 +1,22 @@
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const DeleteButton = ({ habitId, onDelete }) => {
 
+    const {user} = useAuth();
+
     const handleDelete = async () => {
 
-        console.log('Deleting habit with ID:', habitId);
+        const token = await user.getIdToken();
 
         try {
-            const res = await fetch(`http://localhost:4000/api/habits/${habitId}`, {
-                method: 'DELETE' });
+            const res = await fetch(`http://localhost:4000/habits/${habitId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                  authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                }
+               });
 
             if (!res.ok) {
                 toast.error('Failed to delete habit. Please try again.');

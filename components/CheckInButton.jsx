@@ -1,11 +1,21 @@
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 const checkInButton = ({habitId, onCheckIn, habit}) => {
+
+    const {user} = useAuth();
 
     const handleCheckIn = async () => {
         try {
             
-            const response = await fetch(`http://localhost:4000/api/habits/${habitId}/check-in`, {method: 'PATCH'});
+            const token = await user.getIdToken();
+            const response = await fetch(`http://localhost:4000/habits/${habitId}/check-in`, {
+                method: 'PATCH',
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }    
+            });
 
             if(response.status === 404) {
                 toast.error('Habit not found!');
@@ -14,6 +24,11 @@ const checkInButton = ({habitId, onCheckIn, habit}) => {
             
             if(response.status === 400) {
                 toast.error('Habit already checked in today!');
+                return;
+            }
+
+            if(!response.ok){
+                toast.error('Unexpected error, failed to check in habit');
                 return;
             }
 
