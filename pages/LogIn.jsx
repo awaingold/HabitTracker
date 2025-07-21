@@ -16,7 +16,7 @@ export default function LogIn() {
         try {
             await login(email, password);
             toast.success('Logged in successfully!');
-            router.push('/');
+            router.push('/dashboard');
         } catch (error) {
 
             console.log(error.code);

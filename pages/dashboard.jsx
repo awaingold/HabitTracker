@@ -6,12 +6,12 @@ import HabitList from '../components/HabitList';
 import AddHabitForm from '@/components/AddHabitForm';
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
-import App from './_app';
 
 export default function Dashboard() {
 
-    const {user, loading} = useAuth();
+    const {user, loading, logout} = useAuth();
     const router = useRouter();
+    const [habits, setHabits] = useState([]);
 
     useEffect(() => {
         
@@ -24,40 +24,32 @@ export default function Dashboard() {
         return <p className="text-white p-6">Loading...</p>;
     }
 
-    const [habits, setHabits] = useState([]);
+    useEffect(() => {
 
-  useEffect(() => {
-  fetch('http://localhost:4000/api/habits')
-    .then(res => res.json())
-    .then(data => setHabits(data))
-    .catch(console.error());
-}, []);
-
-
-  const handleAddHabit = async (habit) => {
+      const fetchHabits = async () => {
+    if (!user) return;
 
     try {
-
-      const res = await fetch('http://localhost:4000/api/habits', {
-        method: 'POST',
+      const token = await user.getIdToken();
+      const res = await fetch('http://localhost:4000/habits', {
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(habit),
       });
 
-      if (!res.ok) {
-        throw new Error(savedHabit.error || 'Failed to save habit');
-      }
-
-      const savedHabit = await res.json();
-      setHabits([savedHabit, ...habits]);
-      
-
+      const data = await res.json();
+      setHabits(data); // 🧠 Sync response into state
     } catch (error) {
-      console.error('Error adding habit:', error);
-      alert('Failed to add habit. Please try again.');
+      console.error('Error fetching habits:', error);
     }
+    };
+
+    fetchHabits();
+  }, []);
+
+  const handleAddHabit = async (newHabit) => {
+
+    setHabits([...habits, newHabit]); 
     
   };
 
@@ -79,9 +71,12 @@ export default function Dashboard() {
     habit.streakGoal = newGoal;
 
     try {
-      const res = await fetch(`http://localhost:4000/api/habits/${habitId}`, {
+
+      const token = await user.getIdToken();
+      const res = await fetch(`http://localhost:4000/habits/${habitId}/update`, {
         method: 'PATCH',
         headers: {
+          authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(habit),
@@ -114,6 +109,7 @@ export default function Dashboard() {
       </Head>
       <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
+      <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded font-medium hover:bg-red-600 transition duration-200 fixed top-0 right-0 m-4">Log Out</button>
       <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onUpdateGoal={handleSetGoal}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
