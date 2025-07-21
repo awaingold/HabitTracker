@@ -101,6 +101,10 @@ export default function Dashboard() {
     }
   };
 
+  const goToProfile = () => {
+    router.push('/profile');
+  }
+
   return (
     <div className="container mx-auto p-4 bg-zinc-900 text-gray-100 min-h-screen">
       <Head>
@@ -109,7 +113,10 @@ export default function Dashboard() {
       </Head>
       <Toaster position="top-center" reverseOrder={false}/>
       <h1 className="text-3xl font-bold mb-6">Habit Tracker</h1>
-      <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded font-medium hover:bg-red-600 transition duration-200 fixed top-0 right-0 m-4">Log Out</button>
+      <div className = "justify-center fixed top-0 right-0 ">
+        <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded font-medium hover:bg-red-600 transition duration-200 m-4">Log Out</button>
+        <button onClick={goToProfile} className="bg-emerald-500 text-white px-4 py-2 rounded font-medium hover:bg-emerald-600 transition duration-200 m-4">Profile</button>
+      </div>
       <HabitList habits = {habits} onDelete = {handleDeleteHabit} onCheckIn={handleCheckInHabit} onUpdateGoal={handleSetGoal}/>
       <AddHabitForm onAddHabit={handleAddHabit} />
     </div>
