@@ -13,6 +13,7 @@ export default function profile() {
     const [needReAuth, setNeedReAuth] = useState(false);
     const [resettingEmail, setResettingEmail] = useState(false);
     const [resettingPassword, setResettingPassword] = useState(false);
+    const [deletingAccount, setDeletingAccount] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newPass, setNewPass]  = useState('');
@@ -51,12 +52,20 @@ export default function profile() {
     const showResetPassword = () => {
         setResettingEmail(false);
         setResettingPassword(true);
+        setDeletingAccount(false);
     };
 
     const showChangeEmail = () => {
         setResettingEmail(true);
         setResettingPassword(false);
+        setDeletingAccount(false);
     };
+
+    const showAccountDeletion = () => {
+        setDeletingAccount(true);
+        setResettingPassword(false);
+        setResettingEmail(false);
+    }
     
     const handleDeleteAccount = async () => {
 
@@ -146,7 +155,7 @@ export default function profile() {
                 Reset Password
             </button>
             <button
-                onClick={handleDeleteAccount}
+                onClick={showAccountDeletion}
                 className="bg-zinc-400 text-white px-4 py-2 rounded font-medium hover:bg-zinc-500 transition duration-200 m-4"
             >
                 Delete My Account
@@ -154,7 +163,7 @@ export default function profile() {
             {needReAuth && (
                 <LogInForm onLogIn={handleLogIn} email={email} password={password} setEmail={setEmail} setPassword={setPassword}></LogInForm>
             )}
-
+            <div className="mt-4 p-4 bg-zinc-800 rounded-lg">
             {resettingEmail && (
 
                 <form onSubmit={handleChangeEmail}>
@@ -172,6 +181,15 @@ export default function profile() {
                     <input type="submit" className="bg-blue-500 rounded w-xl h-xl hover:bg-blue-600 transition duration-200"></input>
                 </form>
             )}
+
+            {deletingAccount && (
+                <>
+                <h2 className="text-xl">Are you sure you want to delete your account? This cannot be undone.</h2>
+                    <button onClick={handleDeleteAccount} className="bg-red-500 text-white px-4 py-2 rounded font-medium hover:bg-red-600 transition duration-200 m-4">Yes, delete my account</button>
+                    <button onClick={() => setDeletingAccount(false)} className="bg-blue-500 text-white px-4 py-2 rounded font-medium hover:bg-blue-600 transition duration-200 m-4">No, go back</button>
+                </>
+            )}
+            </div>
             </div>
         </div>
     )
