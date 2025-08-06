@@ -1,6 +1,6 @@
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import LogInForm from '../components/LogInForm';
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
@@ -40,9 +40,12 @@ export default function profile() {
         }
     };
 
-    if(!user) {
-        router.push("/LogIn")
-    }
+    useEffect(() => {
+  if (!user) {
+    router.replace('/LogIn')
+  }
+}, [user, router])
+
     
     const handleLogout = async () => {
         await logout();

@@ -21,15 +21,22 @@ export default function LogIn() {
             router.push('/dashboard');
         } catch (error) {
 
-            if(error.code === 'auth/user-not-found') {
-                toast.error('User not found. Please sign up.');
-            } else if(error.code === 'auth/wrong-password') {
-                toast.error('Incorrect password. Please try again.');
-            } else if (error.code === 'auth/too-many-requests') {
-                toast.error('Too many attempts. Please try again later.');
-            } else{
-                toast.error('Failed to log in. Please try again.');
-                console.error('Error logging in:', error);
+            switch(error.code) {
+                
+                case 'auth/user-not-found':
+                    toast.error('User not found. Please sign up.');
+                    break;
+                case 'auth/wrong-password':
+                    toast.error('Incorrect password. Please try again.');
+                    break;
+                case 'auth/too-many-requests':
+                    toast.error('Too many attempts. Please try again later');
+                    break;
+                case 'auth/invalid-credential':
+                    toast.error('Incorrect email or password. Please try again.');
+                    break;
+                default:
+                    toast.error('Something went wrong. Please try again.');
             }
             
         }

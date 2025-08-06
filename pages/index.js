@@ -1,14 +1,11 @@
-import Head from 'next/head';
-import HabitList from '../components/HabitList';
-import AddHabitForm from '@/components/AddHabitForm';
-import { useState , useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
-import toast from 'react-hot-toast';
-import { AuthProvider } from '../context/AuthContext';
-import App from './_app';
+import {useRouter} from 'next/router';
 
 
 export default function Home() {
+
+  const router = useRouter();
+
+  router.replace('/dashboard');
 
   return (
     <a href = '/dashboard'>Go to dashboard</a>
