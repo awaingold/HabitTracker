@@ -91,4 +91,3 @@ const AddHabitForm = ({ onAddHabit }) => {
 };
 
 export default AddHabitForm;
-// This component allows users to add a new habit. It includes a form with fields for the habit title and description. When the form is submitted, it calls the `onAddHabit` function passed as a prop with the new habit data. The form also resets the input fields after submission.

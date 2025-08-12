@@ -49,7 +49,7 @@ export default function profile() {
     
     const handleLogout = async () => {
         await logout();
-        router.push("/LogIn");
+        router.replace("/LogIn");
     };
 
     const showResetPassword = () => {

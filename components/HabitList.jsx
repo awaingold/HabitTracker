@@ -33,4 +33,3 @@ const HabitList = ({habits, onDelete, onCheckIn, onUpdateGoal}) => {
 }
 
 export default HabitList;
-// This component displays a list of habits.
