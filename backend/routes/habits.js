@@ -49,7 +49,7 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-router.delete('/:id/delete', authenticate, async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
 
   const { id } = req.params;
 
@@ -68,7 +68,7 @@ router.delete('/:id/delete', authenticate, async (req, res) => {
   }
 });
 
-router.patch('/:id/check-in', authenticate, async (req, res) => {
+router.patch('/check-in/:id', authenticate, async (req, res) => {
 
   const { id } = req.params;
   const habitRef = db
@@ -137,7 +137,7 @@ router.patch('/:id/check-in', authenticate, async (req, res) => {
   }
 });
 
-router.patch('/:id/update', authenticate, async (req, res) => { 
+router.patch('/update/:id', authenticate, async (req, res) => { 
     const { id } = req.params;
     const {title, description, streakGoal} = req.body;
     const habitRef = db

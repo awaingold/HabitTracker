@@ -73,7 +73,7 @@ export default function Dashboard() {
     try {
 
       const token = await user.getIdToken();
-      const res = await fetch(`http://localhost:4000/habits/${habitId}/update`, {
+      const res = await fetch(`http://localhost:4000/habits/update/${habitId}`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${token}`,

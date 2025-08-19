@@ -10,7 +10,7 @@ const DeleteButton = ({ habitId, onDelete }) => {
         const token = await user.getIdToken();
 
         try {
-            const res = await fetch(`http://localhost:4000/habits/${habitId}/delete`, {
+            const res = await fetch(`http://localhost:4000/habits/${habitId}`, {
                 method: 'DELETE',
                 headers: {
                   authorization: `Bearer ${token}`,

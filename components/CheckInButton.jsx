@@ -9,7 +9,7 @@ const checkInButton = ({habitId, onCheckIn, habit}) => {
         try {
             
             const token = await user.getIdToken();
-            const response = await fetch(`http://localhost:4000/habits/${habitId}/check-in`, {
+            const response = await fetch(`http://localhost:4000/habits/check-in/${habitId}`, {
                 method: 'PATCH',
                 headers: {
                     authorization: `Bearer ${token}`,
