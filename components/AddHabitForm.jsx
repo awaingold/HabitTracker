@@ -22,7 +22,7 @@ const AddHabitForm = ({ onAddHabit }) => {
         }
 
         try {
-            const res = await fetch('http://localhost:4000/habits', {
+            const res = await fetch('https://habittracker-4owm.onrender.com/habits', {
                 method: 'POST',
                 headers: {
                     authorization: `Bearer ${token}`,
