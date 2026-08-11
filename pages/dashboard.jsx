@@ -31,7 +31,7 @@ export default function Dashboard() {
 
     try {
       const token = await user.getIdToken();
-      const res = await fetch('http://localhost:4000/habits', {
+      const res = await fetch('https://habittracker-4owm.onrender.com', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,7 +73,7 @@ export default function Dashboard() {
     try {
 
       const token = await user.getIdToken();
-      const res = await fetch(`http://localhost:4000/habits/update/${habitId}`, {
+      const res = await fetch(`https://habittracker-4owm.onrender.com/update/${habitId}`, {
         method: 'PATCH',
         headers: {
           authorization: `Bearer ${token}`,
