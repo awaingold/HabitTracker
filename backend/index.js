@@ -11,13 +11,13 @@ const app = express();
 app.use(cors({
   origin: 'https://awaingold.github.io',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'], 
+  allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin'], 
   credentials: true,      
 }));
 app.use(express.json());
 app.use('/habits', habitsRouter);
 
-const PORT = 4000;
+const PORT = 10000;
 
 app.listen(PORT, () =>{console.log(`Server is running on https://habittracker-4owm.onrender.com`);});
 
