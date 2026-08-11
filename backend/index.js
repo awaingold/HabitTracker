@@ -9,7 +9,9 @@ const serviceAccount = require('./service-account.json');
 
 const app = express();
 app.use(cors({
-  origin: 'https://habittracker-4owm.onrender.com', 
+  origin: 'https://awaingold.github.io',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'], 
   credentials: true,      
 }));
 app.use(express.json());
