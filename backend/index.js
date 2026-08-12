@@ -7,7 +7,6 @@ const habitsRouter = require('./routes/habits');
 const db = require('./firebaseAdmin');
 const app = express();
 
-const serviceAccount = require('../service-account.json');
 app.use('/habits', habitsRouter);
 const frontendPath = path.join(__dirname, '../out');
 app.use(express.static(frontendPath));
