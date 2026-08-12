@@ -27,16 +27,16 @@ export default function Dashboard() {
     useEffect(() => {
 
       const fetchHabits = async () => {
-    if (!user) return;
+        if (!user) return;
 
-    try {
-      const token = await user.getIdToken();
-      const res = await fetch('https://habittracker-4owm.onrender.com/habits', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+        try {
+          const token = await user.getIdToken();
+          const res = await fetch('https://habittracker-4owm.onrender.com/habits', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res);
       const data = await res.json();
       setHabits(data); // Sync response into state
     } catch (error) {

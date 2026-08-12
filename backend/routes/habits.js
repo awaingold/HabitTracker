@@ -43,6 +43,7 @@ router.get('/', authenticate, async (req, res) => {
     const ref = db.collection('users').doc(req.uid).collection('habits');
     const snapshot = await ref.get();
     const habits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.setHeader('Access-Control-Allow-Origin', 'https://habittracker-4owm.onrender.com');
     res.status(200).json(habits);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch habits' });
