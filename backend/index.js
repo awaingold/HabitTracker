@@ -1,24 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const admin = require('firebase-admin');
 const router = express.Router();
 const habitsRouter = require('./routes/habits');
 const db = require('./firebaseAdmin');
-
-const serviceAccount = require('./service-account.json');
-
 const app = express();
-app.use(cors({
-  origin: 'https://habittracker-4owm.onrender.com',
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin'], 
-  credentials: true,      
-}));
-app.use(express.json());
+
+const serviceAccount = require('../service-account.json');
 app.use('/habits', habitsRouter);
+const frontendPath = path.join(__dirname, '../out');
+app.use(express.static(frontendPath));
 
-const PORT = 10000;
 
-app.listen(PORT, () =>{console.log(`Server is running on https://habittracker-4owm.onrender.com`);});
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () =>{console.log(`Server is running on port ${PORT}`);});
 
 
