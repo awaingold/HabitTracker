@@ -31,14 +31,14 @@ export default function Dashboard() {
 
     try {
       const token = await user.getIdToken();
-      const res = await fetch('https://habittracker-4owm.onrender.com', {
+      const res = await fetch('https://habittracker-4owm.onrender.com/habits', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       const data = await res.json();
-      setHabits(data); // 🧠 Sync response into state
+      setHabits(data); // Sync response into state
     } catch (error) {
       console.error('Error fetching habits:', error);
     }
